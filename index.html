@@ -19,14 +19,33 @@
 
     <div id="interaction-bar-container">
       <div id="interaction-buttons">
-        <button id="current-projects" class="buttons">Project: (default)</button>
-        <button id="create-todo-button" class="buttons">Create a New Todo</button>
-        <button id="create-project-button" class="buttons">Create a New Project</button>
+        <p style="color: black;">Select Project:</p>
+        <select id="selectProject">
+          <option value="default">Default</option>
+        </select>
+        <!--<button id="current-projects" class="interaction-buttons">Project: (default)</button>-->
+        <button id="create-todo-button" class="interaction-buttons">Create a New Todo</button>
+        <button id="create-project-button" class="interaction-buttons">Create a New Project</button>
+      </div>
+    </div>
+
+    <div class="create-forms">
+      <div id="create-project-form" class="form-style">
+        <input type="text" placeholder="title of project" id="project-title-value"><br>
+        <button id="create-project" class="interaction-buttons">create project</button>
+      </div>
+
+      <div id="create-todo-form" class="form-style">
+        <input type="text" placeholder="title of todo item" id="todo-title-value"><br>
+        <input type="textarea" placeholder="description of todo item" id="todo-description-value"><br>
+        <input type="date" placeholder="due date of todo item" id="todo-date-value"><br>
+        <input type="text" placeholder="priority: 1-3" id="todo-priority-value"><br>
+        <button id="create-todo" class="interaction-buttons">create todo</button>
       </div>
     </div>
 
     <div id="todo-container">
-    
+      
     </div>
 
 
