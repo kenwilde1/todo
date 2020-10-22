@@ -1,9 +1,9 @@
 let projectList = [
     {
-        "title": "Food",
+        "title": "default",
         "todoList":
         [
-            ["breakfast", "go get breakfast", "16/11/2020", 1]
+            
         ]
     }
     ];
@@ -11,16 +11,18 @@ let projectList = [
 let currentProject = projectList[0];
 
 const Project = (title) => {
-    let todoList = [title];
+    let todoList = [];
     projectList.push({title, todoList});
-    return { title };
+    return { title, todoList };
 }
 
 const getCurrentProject = () => {
-    return currentProject;
+    const getSelectValue = document.querySelector('#selectProject');
+    return projectList.find(project => project.title == getSelectValue.value);
 }
 
 const setCurrentProject = (position) => {
+
     currentProject = projectList[position];
 }
 

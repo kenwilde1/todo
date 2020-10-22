@@ -3,7 +3,6 @@ import { getCurrentProject, projectList, setCurrentProject } from './projects';
 const currentProject = getCurrentProject();
 
 const Item = (title, description, dueDate, priority) => {
-
     currentProject.todoList.push([title, description, dueDate, priority]);
     
     return { title, description, dueDate, priority };
