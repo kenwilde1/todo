@@ -8,8 +8,10 @@ const Item = (title, description, dueDate, priority) => {
     return { title, description, dueDate, priority };
 }
 
-const editItem = () => {
-    // edit individual property or all?
+const editItem = (title, desc, duedate, priority) => {
+    
+    currentProject
+
 }
 
 const deleteItem = (position) => {
