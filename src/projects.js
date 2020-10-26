@@ -3,7 +3,8 @@ let projectList = [
         "title": "default",
         "todoList":
         [
-            
+            ["Breakfast", "Go get breakfast", "16/11/2020", "1"],
+            ["Gym", "get to the gym", "01/01/2021", "1"]
         ]
     }
     ];
