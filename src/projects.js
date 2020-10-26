@@ -1,3 +1,5 @@
+import { getLocalStorage, setLocalStorage } from './localstorage';
+
 let projectList = [
     {
         "title": "default",
@@ -9,6 +11,7 @@ let projectList = [
     }
     ];
 
+// let the current project be the default (first) project
 let currentProject = projectList[0];
 
 const Project = (title) => {
@@ -17,14 +20,22 @@ const Project = (title) => {
     return { title, todoList };
 }
 
+const initializeDefaultProject = ( () => {
+
+    setLocalStorage('default', 
+    [
+        ["Breakfast", "Go get breakfast", "16/11/2020", "1"],
+        ["Gym", "get to the gym", "01/01/2021", "1"]
+    ]);
+    console.log(true);
+
+})();
+
 const getCurrentProject = () => {
-    const getSelectValue = document.querySelector('#selectProject');
-    return projectList.find(project => project.title == getSelectValue.value);
+    const getSelectValue = document.querySelector('#selectProject').value;
+    return getLocalStorage(getSelectValue);
+
+    //return projectList.find(project => project.title == getSelectValue.value);
 }
 
-const setCurrentProject = (position) => {
-
-    currentProject = projectList[position];
-}
-
-export { Project, projectList, setCurrentProject, getCurrentProject };
+export { Project, projectList, getCurrentProject, initializeDefaultProject };

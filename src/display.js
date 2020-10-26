@@ -1,5 +1,6 @@
 import { getCurrentProject, Project, projectList } from './projects';
 import { deleteItem, editItem, Item } from './item';
+import { setLocalStorage } from './localstorage';
 
 let currentProject = getCurrentProject();
 
@@ -11,6 +12,7 @@ const editTodoForm = document.querySelector('#edit-todo-form');
 
 // module to handle DOM behaviour
 const addEventListenersToButtons = ( () => {
+    
     // get button elements
     const interactionButtons = document.querySelectorAll('.interaction-buttons');
 
@@ -41,6 +43,23 @@ const addEventListenersToButtons = ( () => {
     }));
 })();
 
+const displayProjects = (() => {
+    
+    const selectContainer = document.querySelector('#selectProject');
+
+    for (let i = 0; i < localStorage.length; i++) {
+
+        const addProject = document.createElement('option');
+        addProject.id = localStorage.key(i);
+        addProject.value = localStorage.key(i);
+        addProject.innerHTML = localStorage.key(i);
+        selectContainer.appendChild(addProject);
+    }
+
+})(); 
+
+
+
 const renderTodoDOM = () => {
 
     currentProject = getCurrentProject();
@@ -52,9 +71,7 @@ const renderTodoDOM = () => {
         todoContainer.removeChild(todoContainer.lastChild);
     }
 
-    console.log(currentProject);
-
-    for (let i = 0; i < currentProject.todoList.length; i++) {
+    for (let i = 0; i < currentProject.length; i++) {
         const todoSlice = document.createElement('div');
         todoSlice.id = i;
         todoSlice.classList.add('todoItem');
@@ -64,19 +81,19 @@ const renderTodoDOM = () => {
             switch (j) {
                 case 0:
                     property.id = `${i}title`;
-                    property.innerHTML = `Title: ${currentProject.todoList[i][j]}`;
+                    property.innerHTML = `Title: ${currentProject[i][j]}`;
                     break;
                 case 1:
                     property.id = `${i}desc`;
-                    property.innerHTML = `Description: ${currentProject.todoList[i][j]}`;
+                    property.innerHTML = `Description: ${currentProject[i][j]}`;
                     break;
                 case 2:
                     property.id = `${i}date`;
-                    property.innerHTML = `Due Date: ${currentProject.todoList[i][j]}`;
+                    property.innerHTML = `Due Date: ${currentProject[i][j]}`;
                     break;
                 case 3:
                     property.id = `${i}priority`;
-                    property.innerHTML = `Priority: ${currentProject.todoList[i][j]}`;
+                    property.innerHTML = `Priority: ${currentProject[i][j]}`;
                     break;
                 case 4:
                     property = document.createElement('button');
@@ -98,6 +115,9 @@ const renderTodoDOM = () => {
 }
 
 const createProjectDOM = () => {
+
+    const getSelectValue = document.querySelector('#selectProject').value;
+
     const projectTitleField = document.querySelector('#project-title-value');
     const newProject = Project(projectTitleField.value);
     const createProjectForm = document.querySelector('#create-project-form');
@@ -110,9 +130,12 @@ const createProjectDOM = () => {
 
     selectField.appendChild(newProjectOption);
     createProjectForm.classList.toggle('form-style');
+    setLocalStorage(newProjectOption.value, []);
 }
 
 const createTodo = () => {
+
+    const getSelectValue = document.querySelector('#selectProject').value;
 
     const todoTitle = document.querySelector('#todo-title-value').value;
     const todoDescription = document.querySelector('#todo-description-value').value;
@@ -122,6 +145,7 @@ const createTodo = () => {
     const newItem = Item(todoTitle, todoDescription, todoDueDate, todoPriority);
     todoSliceForm.classList.toggle('form-style');
     renderTodoDOM();
+    setLocalStorage(getSelectValue, currentProject);
                 
 }
 
@@ -133,16 +157,16 @@ const updateTodoListDOM = (elementID) => {
     todoProperties.forEach( (prop) => {
         switch(prop.id) {
             case `${elementID}title`:
-                prop.innerHTML = `Title: ${currentProject.todoList[elementID][0]}`;
+                prop.innerHTML = `Title: ${currentProject[elementID][0]}`;
                 break;
             case `${elementID}desc`:
-                prop.innerHTML = `Description: ${currentProject.todoList[elementID][1]}`;
+                prop.innerHTML = `Description: ${currentProject[elementID][1]}`;
                 break;
             case `${elementID}date`:
-                prop.innerHTML = `Due Date: ${currentProject.todoList[elementID][2]}`;
+                prop.innerHTML = `Due Date: ${currentProject[elementID][2]}`;
                 break;
             case `${elementID}priority`:
-                prop.innerHTML = `Priority: ${currentProject.todoList[elementID][3]}`;
+                prop.innerHTML = `Priority: ${currentProject[elementID][3]}`;
                 break;
         }
     });
@@ -165,6 +189,8 @@ const createNewEventListeners = () => {
 
 const editTodoFormHandler = (identifier) => {
 
+    const currentProjectTitle = document.querySelector('#selectProject').value;
+
     editTodoForm.classList.remove('form-style');
 
     const editTodoTitle = document.querySelector('#edit-title-value');
@@ -178,22 +204,22 @@ const editTodoFormHandler = (identifier) => {
     const todoDueDate = document.querySelector('#todo-date-value').value;
     const todoPriority = document.querySelector('#todo-priority-value').value;
 
-    editTodoTitle.value = currentProject.todoList[identifier][0];
-    editTodoDescription.value = currentProject.todoList[identifier][1];
-    editTodoDueDate.value = currentProject.todoList[identifier][2];
-    editTodoPriority.value = currentProject.todoList[identifier][3];
+    editTodoTitle.value = currentProject[identifier][0];
+    editTodoDescription.value = currentProject[identifier][1];
+    editTodoDueDate.value = currentProject[identifier][2];
+    editTodoPriority.value = currentProject[identifier][3];
 
     saveChangesButton.addEventListener('click', (e) => {
         
-        currentProject.todoList[identifier][0] = editTodoTitle.value;
-        currentProject.todoList[identifier][1] = editTodoDescription.value;
-        currentProject.todoList[identifier][2] = editTodoDueDate.value;
-        currentProject.todoList[identifier][3] = editTodoPriority.value;
+        currentProject[identifier][0] = editTodoTitle.value;
+        currentProject[identifier][1] = editTodoDescription.value;
+        currentProject[identifier][2] = editTodoDueDate.value;
+        currentProject[identifier][3] = editTodoPriority.value;
+        setLocalStorage(currentProjectTitle, currentProject);
         updateTodoListDOM(identifier);
         editTodoForm.classList.add('form-style');
 
     })
-
 }
 
 const deleteTodoFormHandler = (todo) => {
