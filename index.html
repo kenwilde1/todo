@@ -19,10 +19,13 @@
 
     <div id="interaction-bar-container">
       <div id="interaction-buttons">
-        <p style="color: black;">Select Project:</p>
-        <select id="selectProject">
-          <option value="default">Default</option>
-        </select>
+        <div id="interaction-project-select">
+          <p style="color: black;">Select Project:</p>
+          <select id="selectProject">
+            <option value="default">Default</option>
+          </select>
+          <button id="show-todos-button" class="interaction-buttons">list all todos</button>
+      </div>
         <!--<button id="current-projects" class="interaction-buttons">Project: (default)</button>-->
         <button id="create-todo-button" class="interaction-buttons">Create a New Todo</button>
         <button id="create-project-button" class="interaction-buttons">Create a New Project</button>
@@ -50,6 +53,7 @@
         <input type="text" id="edit-priority-value"><br>
         <button id="save-changes-button" class="interaction-buttons">save changes</button>
       </div>
+      
     </div>
 
     <div id="todo-container">
