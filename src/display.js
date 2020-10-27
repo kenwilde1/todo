@@ -9,6 +9,7 @@ const todoContainer = document.querySelector('#todo-container');
 const todoSliceForm = document.querySelector('#create-todo-form');
 const createProjectForm = document.querySelector('#create-project-form');
 const editTodoForm = document.querySelector('#edit-todo-form');
+const createForms = document.querySelector('#create-forms');
 
 // module to handle DOM behaviour
 const addEventListenersToButtons = ( () => {
@@ -21,13 +22,21 @@ const addEventListenersToButtons = ( () => {
         switch (button.id) {
             case 'create-todo-button':
                 // todo'Slice' refers to a single todo item 
-                todoSliceForm.classList.toggle('form-style');
+                if (!createProjectForm.classList.contains('form-style')) {
+                    alert('You cannot create a new todo item while you are creating a new project');
+                }else {
+                    todoSliceForm.classList.toggle('form-style');
+                }
                 break;
             case 'create-todo':
                 createTodo();
                 break;
             case 'create-project-button':
-                createProjectForm.classList.toggle('form-style');
+                if (!todoSliceForm.classList.contains('form-style')) {
+                    alert('You cannot create a new project while you are creating a new todo item');
+                }else {
+                    createProjectForm.classList.toggle('form-style');
+                }
                 break;
             case 'create-project':
                 createProjectDOM();
@@ -39,6 +48,15 @@ const addEventListenersToButtons = ( () => {
                 renderTodoDOM();
                 console.log('hi');
                 break;
+        }
+        if (button.innerHTML == 'X') {
+            console.log(button.id);
+            switch (button.id) {
+                case 'exit-edit-form':
+                    console.log(button.id);
+                    editTodoForm.classList.toggle('form-style');
+                    break;
+            }
         }
     }));
 })();
@@ -57,8 +75,6 @@ const displayProjects = (() => {
     }
 
 })(); 
-
-
 
 const renderTodoDOM = () => {
 
@@ -92,6 +108,9 @@ const renderTodoDOM = () => {
                     property.innerHTML = `Due Date: ${currentProject[i][j]}`;
                     break;
                 case 3:
+                    if (currentProject[i][j] == 1) {
+                        todoSlice.classList.add('priorityOne');
+                    }
                     property.id = `${i}priority`;
                     property.innerHTML = `Priority: ${currentProject[i][j]}`;
                     break;
@@ -143,9 +162,9 @@ const createTodo = () => {
     const todoPriority = document.querySelector('#todo-priority-value').value;
 
     const newItem = Item(todoTitle, todoDescription, todoDueDate, todoPriority);
+
     todoSliceForm.classList.toggle('form-style');
     renderTodoDOM();
-    setLocalStorage(getSelectValue, currentProject);
                 
 }
 
@@ -176,11 +195,18 @@ const updateTodoListDOM = (elementID) => {
 const createNewEventListeners = () => {
     // this function creates event listeners for dynamically created elements (buttons)
     const dynamicButtons = document.querySelectorAll('.todo-buttons');
-
+    
     dynamicButtons.forEach( (button) => button.addEventListener('click', (e) => {
+        
         if (button.innerHTML == 'Edit') {
-            editTodoFormHandler(button.id);
+            if (!createProjectForm.classList.contains('form-style') || !todoSliceForm.classList.contains('form-style')) {
+                alert('You cannot edit a todo item while you are still editing / creating something else');
+            }else {
+                editTodoFormHandler(button.id);
+            }
+            
         }else if(button.innerHTML == 'Delete') {
+            
             deleteTodoFormHandler(button.id);
         }
         
@@ -191,7 +217,7 @@ const editTodoFormHandler = (identifier) => {
 
     const currentProjectTitle = document.querySelector('#selectProject').value;
 
-    editTodoForm.classList.remove('form-style');
+    editTodoForm.classList.toggle('form-style');
 
     const editTodoTitle = document.querySelector('#edit-title-value');
     const editTodoDescription = document.querySelector('#edit-description-value');
@@ -207,6 +233,7 @@ const editTodoFormHandler = (identifier) => {
     editTodoTitle.value = currentProject[identifier][0];
     editTodoDescription.value = currentProject[identifier][1];
     editTodoDueDate.value = currentProject[identifier][2];
+    console.log(editTodoDueDate.value)
     editTodoPriority.value = currentProject[identifier][3];
 
     saveChangesButton.addEventListener('click', (e) => {

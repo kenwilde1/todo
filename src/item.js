@@ -1,8 +1,8 @@
-import { getCurrentProject, projectList, setCurrentProject } from './projects';
+import { getCurrentProject } from './projects';
 import { setLocalStorage } from './localstorage';
 
 const Item = (title, description, dueDate, priority) => {
-
+    console.log(title, description, dueDate, priority);
     const currentProjectTitle = document.querySelector('#selectProject').value; 
     const currentProject = getCurrentProject();
     currentProject.push([title, description, dueDate, priority]);
@@ -10,12 +10,6 @@ const Item = (title, description, dueDate, priority) => {
     setLocalStorage(currentProjectTitle, currentProject);
 
     return { title, description, dueDate, priority };
-}
-
-const editItem = (title, desc, duedate, priority) => {
-    
-    currentProject
-
 }
 
 const deleteItem = (position) => {
