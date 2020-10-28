@@ -1,5 +1,5 @@
-import { getCurrentProject, Project, projectList } from './projects';
-import { deleteItem, editItem, Item } from './item';
+import { getCurrentProject, Project } from './projects';
+import { deleteItem, Item } from './item';
 import { setLocalStorage } from './localstorage';
 
 let currentProject = getCurrentProject();
@@ -24,7 +24,10 @@ const addEventListenersToButtons = ( () => {
                 // todo'Slice' refers to a single todo item 
                 if (!createProjectForm.classList.contains('form-style')) {
                     alert('You cannot create a new todo item while you are creating a new project');
-                }else {
+                }else if (!editTodoForm.classList.contains('form-style')) {
+                    alert('You cannot create a new todo item while you are editing a current todo item');
+                }
+                else {
                     todoSliceForm.classList.toggle('form-style');
                 }
                 break;
@@ -34,6 +37,8 @@ const addEventListenersToButtons = ( () => {
             case 'create-project-button':
                 if (!todoSliceForm.classList.contains('form-style')) {
                     alert('You cannot create a new project while you are creating a new todo item');
+                }else if (!editTodoForm.classList.contains('form-style')) {
+                    alert('You cannot create a new project while you are editing a todo item')
                 }else {
                     createProjectForm.classList.toggle('form-style');
                 }
@@ -42,18 +47,20 @@ const addEventListenersToButtons = ( () => {
                 createProjectDOM();
                 break;
             case 'edit-todo-button':
-                console.log("hello");
                 break;
             case 'show-todos-button':
                 renderTodoDOM();
-                console.log('hi');
+                break;
+            case 'exit-todo-form':
+                todoSliceForm.classList.toggle('form-style');
+                break;
+            case 'exit-project-form':
+                createProjectForm.classList.toggle('form-style');
                 break;
         }
         if (button.innerHTML == 'X') {
-            console.log(button.id);
             switch (button.id) {
                 case 'exit-edit-form':
-                    console.log(button.id);
                     editTodoForm.classList.toggle('form-style');
                     break;
             }
@@ -79,7 +86,6 @@ const displayProjects = (() => {
 const renderTodoDOM = () => {
 
     currentProject = getCurrentProject();
-    console.log(currentProject);
 
     todoContainer.classList.toggle('form-style');
 
@@ -161,11 +167,15 @@ const createTodo = () => {
     const todoDueDate = document.querySelector('#todo-date-value').value;
     const todoPriority = document.querySelector('#todo-priority-value').value;
 
-    const newItem = Item(todoTitle, todoDescription, todoDueDate, todoPriority);
+    // ensure priority is between 1 - 3 in order to create a todo
+    if (parseInt(todoPriority) > 3 || parseInt(todoPriority) < 1) {
+        alert("Please choose a priority between 1-3 (High = 1, Medium = 2, Low = 3");
+    }else {
+        const newItem = Item(todoTitle, todoDescription, todoDueDate, todoPriority);
 
-    todoSliceForm.classList.toggle('form-style');
-    renderTodoDOM();
-                
+        todoSliceForm.classList.toggle('form-style');
+        renderTodoDOM();
+    }           
 }
 
 const updateTodoListDOM = (elementID) => {
@@ -189,7 +199,6 @@ const updateTodoListDOM = (elementID) => {
                 break;
         }
     });
-    console.log(todoProperties);
 }
 
 const createNewEventListeners = () => {
@@ -233,7 +242,6 @@ const editTodoFormHandler = (identifier) => {
     editTodoTitle.value = currentProject[identifier][0];
     editTodoDescription.value = currentProject[identifier][1];
     editTodoDueDate.value = currentProject[identifier][2];
-    console.log(editTodoDueDate.value)
     editTodoPriority.value = currentProject[identifier][3];
 
     saveChangesButton.addEventListener('click', (e) => {

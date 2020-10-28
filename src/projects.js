@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage } from './localstorage';
+import { getLocalStorage } from './localstorage';
 
 let projectList = [
     {
@@ -20,8 +20,6 @@ const Project = (title) => {
 const getCurrentProject = () => {
     const getSelectValue = document.querySelector('#selectProject').value;
     return getLocalStorage(getSelectValue);
-
-    //return projectList.find(project => project.title == getSelectValue.value);
 }
 
 export { Project, projectList, getCurrentProject };
